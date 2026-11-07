@@ -1,4 +1,4 @@
-package com.example.apex
+package com.example.apex.presentation.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -20,7 +20,4 @@ fun AppTheme(
         colorScheme = colorScheme,
         content = content
     )
-
-
-
 }

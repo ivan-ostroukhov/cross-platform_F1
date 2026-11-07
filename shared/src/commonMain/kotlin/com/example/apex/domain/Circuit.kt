@@ -1,4 +1,4 @@
-package com.example.apex
+package com.example.apex.domain
 
 data class Circuit(
     val id: Int,

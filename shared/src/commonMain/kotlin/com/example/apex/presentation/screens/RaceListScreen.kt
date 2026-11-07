@@ -1,4 +1,4 @@
-package com.example.apex
+package com.example.apex.presentation.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,11 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.stringResource
+import com.example.apex.presentation.screens.components.RaceCard
+import com.example.apex.presentation.viewmodels.RaceListUiState
 import f1archive.shared.generated.resources.Res
+import f1archive.shared.generated.resources.loading
 import f1archive.shared.generated.resources.nothing_found
 import f1archive.shared.generated.resources.search_races
-import f1archive.shared.generated.resources.loading
+import org.jetbrains.compose.resources.stringResource
+
 @Composable
 fun RaceListScreen(
     state: RaceListUiState,
@@ -29,16 +32,13 @@ fun RaceListScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-
         OutlinedTextField(
             value = state.searchQuery,
             onValueChange = onSearchQueryChange,
             modifier = Modifier.fillMaxWidth(),
             label = {
                 Text(
-                    text = stringResource(
-                        Res.string.search_races
-                    )
+                    text = stringResource(Res.string.search_races)
                 )
             },
             singleLine = true
@@ -46,14 +46,11 @@ fun RaceListScreen(
 
         if (state.isLoading) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = stringResource(Res.string.loading)
-                )
+                Text(text = stringResource(Res.string.loading))
             }
         } else if (state.filteredRaces.isEmpty()) {
             Column(
@@ -61,9 +58,7 @@ fun RaceListScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = stringResource(Res.string.nothing_found)
-                )
+                Text(text = stringResource(Res.string.nothing_found))
             }
         } else {
             LazyColumn(
@@ -77,9 +72,7 @@ fun RaceListScreen(
                 ) { race ->
                     RaceCard(
                         race = race,
-                        onClick = {
-                            onRaceClick(race.id)
-                        }
+                        onClick = { onRaceClick(race.id) }
                     )
                 }
             }

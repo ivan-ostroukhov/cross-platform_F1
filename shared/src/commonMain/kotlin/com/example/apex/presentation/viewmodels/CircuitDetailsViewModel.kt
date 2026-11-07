@@ -1,8 +1,9 @@
-package com.example.apex
+package com.example.apex.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.apex.data.RaceRepository
+import com.example.apex.domain.Circuit
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,13 +21,10 @@ class CircuitDetailsViewModel(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
-        CircuitDetailsUiState(
-            isLoading = true
-        )
+        CircuitDetailsUiState(isLoading = true)
     )
 
-    val uiState: StateFlow<CircuitDetailsUiState> =
-        _uiState.asStateFlow()
+    val uiState: StateFlow<CircuitDetailsUiState> = _uiState.asStateFlow()
 
     init {
         loadCircuit()
@@ -35,15 +33,10 @@ class CircuitDetailsViewModel(
     private fun loadCircuit() {
         viewModelScope.launch {
             val circuit = repository.getCircuit(circuitId)
-
             _uiState.value = if (circuit == null) {
-                CircuitDetailsUiState(
-                    notFound = true
-                )
+                CircuitDetailsUiState(notFound = true)
             } else {
-                CircuitDetailsUiState(
-                    circuit = circuit
-                )
+                CircuitDetailsUiState(circuit = circuit)
             }
         }
     }

@@ -1,9 +1,9 @@
 package com.example.apex.data
 
-import com.example.apex.Circuit
-import com.example.apex.Driver
-import com.example.apex.Race
-import com.example.apex.RaceDetails
+import com.example.apex.domain.Circuit
+import com.example.apex.domain.Driver
+import com.example.apex.domain.Race
+import com.example.apex.domain.RaceDetails
 
 interface RaceRepository {
 

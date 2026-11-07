@@ -1,27 +1,20 @@
-
 package com.example.apex
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import java.util.Properties
-
-private fun loadWindowTitle(): String {
-    val properties = Properties()
-
-    val stream = object {}.javaClass
-        .getResourceAsStream("/desktop.properties")
-
-    if (stream != null) {
-        stream.use { properties.load(it) }
-    }
-
-    return properties.getProperty("app.title", "Apex Archive")
-}
+import f1archive.shared.generated.resources.Res
+import f1archive.shared.generated.resources.app_title
+import kotlinx.coroutines.runBlocking
+import org.jetbrains.compose.resources.getString
 
 fun main() = application {
+    val windowTitle = runBlocking {
+        getString(Res.string.app_title)
+    }
+
     Window(
         onCloseRequest = ::exitApplication,
-        title = loadWindowTitle()
+        title = windowTitle
     ) {
         App()
     }

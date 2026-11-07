@@ -1,4 +1,4 @@
-package com.example.apex
+package com.example.apex.presentation.locale
 
 import java.util.Locale
 

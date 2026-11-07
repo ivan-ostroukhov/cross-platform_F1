@@ -1,8 +1,9 @@
-package com.example.apex
+package com.example.apex.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.apex.data.RaceRepository
+import com.example.apex.domain.RaceDetails
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,8 +24,7 @@ class RaceDetailsViewModel(
         RaceDetailsUiState(isLoading = true)
     )
 
-    val uiState: StateFlow<RaceDetailsUiState> =
-        _uiState.asStateFlow()
+    val uiState: StateFlow<RaceDetailsUiState> = _uiState.asStateFlow()
 
     init {
         loadRace()
@@ -33,15 +33,10 @@ class RaceDetailsViewModel(
     private fun loadRace() {
         viewModelScope.launch {
             val details = repository.getRaceDetails(raceId)
-
             _uiState.value = if (details == null) {
-                RaceDetailsUiState(
-                    notFound = true
-                )
+                RaceDetailsUiState(notFound = true)
             } else {
-                RaceDetailsUiState(
-                    details = details
-                )
+                RaceDetailsUiState(details = details)
             }
         }
     }
