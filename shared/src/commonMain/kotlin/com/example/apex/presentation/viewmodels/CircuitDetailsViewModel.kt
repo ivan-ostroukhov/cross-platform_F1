@@ -1,5 +1,6 @@
 package com.example.apex.presentation.viewmodels
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.apex.data.RaceRepository
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+@Immutable
 data class CircuitDetailsUiState(
     val circuit: Circuit? = null,
     val isLoading: Boolean = false,

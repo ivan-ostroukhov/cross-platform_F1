@@ -1,5 +1,8 @@
 package com.example.apex.domain
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class Race(
     val id: Int,
     val name: String,
