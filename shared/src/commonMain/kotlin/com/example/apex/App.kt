@@ -27,7 +27,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.apex.data.MockRaceRepository
+import com.example.apex.data.KtorRaceRepository
 import com.example.apex.navigation.Route
 import com.example.apex.presentation.locale.LocalAppLocale
 import com.example.apex.presentation.screens.CircuitDetailsScreen
@@ -71,7 +71,7 @@ fun App() {
     var darkTheme by remember { mutableStateOf(false) }
     var language by remember { mutableStateOf("ru") }
 
-    val repository = remember { MockRaceRepository() }
+    val repository = remember { KtorRaceRepository() }
 
     val backStack = rememberNavBackStack(
         navConfig,
