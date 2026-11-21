@@ -10,6 +10,9 @@ data class ErgastResponseDto<T>(
 
 @Serializable
 data class RaceTableDataDto(
+    @SerialName("limit") val limit: String? = null,
+    @SerialName("offset") val offset: String? = null,
+    @SerialName("total") val total: String? = null,
     @SerialName("RaceTable") val raceTable: RacesWrapperDto? = null
 )
 

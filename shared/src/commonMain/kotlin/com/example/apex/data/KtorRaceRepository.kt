@@ -13,20 +13,18 @@ class KtorRaceRepository(
     private val apiService: F1ApiService = F1ApiService()
 ) : RaceRepository {
 
-    private var racesCache: List<Race>? = null
+    private val racesCache = mutableMapOf<Int, Race>()
     private val detailsCache = mutableMapOf<Int, RaceDetails>()
     private val circuitCache = mutableMapOf<Int, Circuit>()
 
-    override suspend fun getRaces(): List<Race> {
-        racesCache?.let { return it }
-
+    override suspend fun getRaces(limit: Int, offset: Int): List<Race> {
         return withContext(Dispatchers.Default) {
             try {
-                val response = apiService.getRaces()
+                val response = apiService.getRaces(limit = limit, offset = offset)
                 val raceDtos = response.mrData.raceTable?.races ?: emptyList()
 
                 val mapped = raceDtos.mapIndexed { index, dto ->
-                    val roundInt = dto.round?.toIntOrNull() ?: (index + 1)
+                    val roundInt = dto.round?.toIntOrNull() ?: (offset + index + 1)
                     val circuitIntId = dto.circuit?.circuitId?.hashCode() ?: roundInt
 
                     val circuit = Circuit(
@@ -37,7 +35,7 @@ class KtorRaceRepository(
                     )
                     circuitCache[circuitIntId] = circuit
 
-                    Race(
+                    val race = Race(
                         id = roundInt,
                         name = dto.raceName ?: "",
                         circuitId = circuitIntId,
@@ -47,14 +45,13 @@ class KtorRaceRepository(
                         date = dto.date ?: "",
                         round = roundInt
                     )
+                    racesCache[roundInt] = race
+                    race
                 }
 
-                racesCache = mapped
                 mapped
             } catch (e: CancellationException) {
                 throw e
-            } catch (e: Throwable) {
-                emptyList()
             }
         }
     }
@@ -64,8 +61,11 @@ class KtorRaceRepository(
 
         return withContext(Dispatchers.Default) {
             try {
-                val races = getRaces()
-                val race = races.find { it.id == id } ?: return@withContext null
+                var race = racesCache[id]
+                if (race == null) {
+                    val races = getRaces(limit = 100, offset = 0)
+                    race = races.find { it.id == id } ?: return@withContext null
+                }
 
                 val circuit = getCircuit(race.circuitId) ?: Circuit(
                     id = race.circuitId,
@@ -103,8 +103,6 @@ class KtorRaceRepository(
                 details
             } catch (e: CancellationException) {
                 throw e
-            } catch (e: Throwable) {
-                null
             }
         }
     }
@@ -114,12 +112,12 @@ class KtorRaceRepository(
 
         return withContext(Dispatchers.Default) {
             try {
-                getRaces()
+                if (!circuitCache.containsKey(id)) {
+                    getRaces(limit = 100, offset = 0)
+                }
                 circuitCache[id]
             } catch (e: CancellationException) {
                 throw e
-            } catch (e: Throwable) {
-                null
             }
         }
     }

@@ -26,8 +26,12 @@ class F1ApiService(
         }
     }
 
-    suspend fun getRaces(season: String = "current"): ErgastResponseDto<RaceTableDataDto> {
-        val url = "${baseUrl.trimEnd('/')}/$season.json"
+    suspend fun getRaces(
+        season: String = "current",
+        limit: Int = 10,
+        offset: Int = 0
+    ): ErgastResponseDto<RaceTableDataDto> {
+        val url = "${baseUrl.trimEnd('/')}/$season.json?limit=$limit&offset=$offset"
         return client.get(url).body()
     }
 

@@ -154,6 +154,12 @@ fun App() {
                                         backStack.add(
                                             Route.RaceDetails(raceId = raceId)
                                         )
+                                    },
+                                    onLoadNextPage = {
+                                        viewModel.loadNextPage()
+                                    },
+                                    onRetry = {
+                                        viewModel.loadInitialRaces()
                                     }
                                 )
                             }
@@ -176,6 +182,9 @@ fun App() {
                                         backStack.add(
                                             Route.CircuitDetails(circuitId = circuitId)
                                         )
+                                    },
+                                    onRetry = {
+                                        viewModel.loadRace()
                                     }
                                 )
                             }
@@ -193,6 +202,9 @@ fun App() {
                                     state = state,
                                     onBack = {
                                         backStack.removeLastOrNull()
+                                    },
+                                    onRetry = {
+                                        viewModel.loadCircuit()
                                     }
                                 )
                             }
