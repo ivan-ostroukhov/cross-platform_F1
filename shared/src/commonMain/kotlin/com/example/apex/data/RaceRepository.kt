@@ -7,7 +7,7 @@ import com.example.apex.domain.RaceDetails
 
 interface RaceRepository {
 
-    suspend fun getRaces(): List<Race>
+    suspend fun getRaces(limit: Int = 10, offset: Int = 0): List<Race>
 
     suspend fun getRaceDetails(id: Int): RaceDetails?
 

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,13 +18,16 @@ import f1archive.shared.generated.resources.back
 import f1archive.shared.generated.resources.circuit_not_found
 import f1archive.shared.generated.resources.city
 import f1archive.shared.generated.resources.country
+import f1archive.shared.generated.resources.error_loading
 import f1archive.shared.generated.resources.loading
+import f1archive.shared.generated.resources.retry
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CircuitDetailsScreen(
     state: CircuitDetailsUiState,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onRetry: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -34,7 +38,21 @@ fun CircuitDetailsScreen(
     ) {
         when {
             state.isLoading -> {
-                Text(text = stringResource(Res.string.loading))
+                CircularProgressIndicator()
+                Text(
+                    text = stringResource(Res.string.loading),
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+            }
+
+            state.isError -> {
+                Text(text = stringResource(Res.string.error_loading))
+                Button(
+                    onClick = onRetry,
+                    modifier = Modifier.padding(top = 16.dp)
+                ) {
+                    Text(text = stringResource(Res.string.retry))
+                }
             }
 
             state.notFound -> {

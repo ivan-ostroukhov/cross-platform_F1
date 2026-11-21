@@ -26,4 +26,6 @@
     <string name="open_circuit">Открыть трассу</string>
     <string name="loading">Загрузка...</string>
     <string name="circuit_not_found">Трасса не найдена</string>
+    <string name="error_loading">Ошибка загрузки данных</string>
+    <string name="retry">Повторить</string>
 </resources>

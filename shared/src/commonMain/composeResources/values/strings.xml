@@ -26,4 +26,6 @@
     <string name="open_circuit">Open circuit</string>
     <string name="loading">Loading...</string>
     <string name="circuit_not_found">Circuit not found</string>
+    <string name="error_loading">Failed to load data</string>
+    <string name="retry">Retry</string>
 </resources>
