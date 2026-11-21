@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.apex.data.RaceRepository
 import com.example.apex.domain.Circuit
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +15,8 @@ import kotlinx.coroutines.launch
 data class CircuitDetailsUiState(
     val circuit: Circuit? = null,
     val isLoading: Boolean = false,
-    val notFound: Boolean = false
+    val notFound: Boolean = false,
+    val isError: Boolean = false
 )
 
 class CircuitDetailsViewModel(
@@ -32,13 +34,20 @@ class CircuitDetailsViewModel(
         loadCircuit()
     }
 
-    private fun loadCircuit() {
+    fun loadCircuit() {
         viewModelScope.launch {
-            val circuit = repository.getCircuit(circuitId)
-            _uiState.value = if (circuit == null) {
-                CircuitDetailsUiState(notFound = true)
-            } else {
-                CircuitDetailsUiState(circuit = circuit)
+            _uiState.value = CircuitDetailsUiState(isLoading = true)
+            try {
+                val circuit = repository.getCircuit(circuitId)
+                _uiState.value = if (circuit == null) {
+                    CircuitDetailsUiState(notFound = true)
+                } else {
+                    CircuitDetailsUiState(circuit = circuit)
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                _uiState.value = CircuitDetailsUiState(isError = true)
             }
         }
     }

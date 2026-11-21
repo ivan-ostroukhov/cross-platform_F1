@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,9 +20,11 @@ import f1archive.shared.generated.resources.city
 import f1archive.shared.generated.resources.country
 import f1archive.shared.generated.resources.date
 import f1archive.shared.generated.resources.drivers
+import f1archive.shared.generated.resources.error_loading
 import f1archive.shared.generated.resources.loading
 import f1archive.shared.generated.resources.open_circuit
 import f1archive.shared.generated.resources.race_not_found
+import f1archive.shared.generated.resources.retry
 import f1archive.shared.generated.resources.stage
 import org.jetbrains.compose.resources.stringResource
 
@@ -29,7 +32,8 @@ import org.jetbrains.compose.resources.stringResource
 fun RaceDetailsScreen(
     state: RaceDetailsUiState,
     onBack: () -> Unit,
-    onCircuitClick: (Int) -> Unit
+    onCircuitClick: (Int) -> Unit,
+    onRetry: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -40,7 +44,21 @@ fun RaceDetailsScreen(
     ) {
         when {
             state.isLoading -> {
-                Text(text = stringResource(Res.string.loading))
+                CircularProgressIndicator()
+                Text(
+                    text = stringResource(Res.string.loading),
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+            }
+
+            state.isError -> {
+                Text(text = stringResource(Res.string.error_loading))
+                Button(
+                    onClick = onRetry,
+                    modifier = Modifier.padding(top = 16.dp)
+                ) {
+                    Text(text = stringResource(Res.string.retry))
+                }
             }
 
             state.notFound -> {
